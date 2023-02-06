@@ -5,15 +5,19 @@
     </div>
     <section>
       <div class="container">
-        <h3 class="sub-header-text">Initialisation du test technique</h3>
-        <progress-bar :initialValue="50" />
-        <h3 class="sub-header-text">Avancement de la phase de développement</h3>
-        <progress-bar :initialValue="25" />
+        <div  v-for="(data, index) in dataInit" :key="index">
+          <h4 class="sub-header-text">{{ data.title }}</h4>
+          <progress-bar 
+            :progressValue="progressValue == null ? data.initValue : progressValue" 
+            :progressColor="colorProgress(progressValue == null ? data.initValue : progressValue)" 
+            :widthProgress="widthProgress(progressValue == null ? data.initValue : progressValue)" />
+        </div>
+        
       </div>
       <div class="controller">
-        <button >Remettre à zero les compteurs</button>
-        <button>Ajouter 5%</button>
-        <button>Ajouter 10%</button>
+        <button @click="initValues()">Remettre à zero les compteurs</button>
+        <button @click="incrementValue(5)">Ajouter 5%</button>
+        <button @click="incrementValue(10)">Ajouter 10%</button>
       </div>
     </section>
   </div>
@@ -27,20 +31,56 @@ export default {
   name: "HomeView",
   components: {
     ProgressBar
+  },
+  data() {
+    return {
+      progressValue: null,
+      progressbar: null,
+      dataInit: [
+        { title: "Initialisation du test technique", initValue: 50 },
+        { title: "Avancement de la phase de développement", initValue: 25 },
+      ]
+    }
+  },
+  methods: {
+    colorProgress(color) {
+      if (color <= 25) {
+        return  "#7160E8"
+      } else if (color > 25 && color <= 50) {
+        return  "#60ADE8"
+      } else if (color > 50 && color <= 75) {
+        return  "#60E8B6"
+      } else if (color > 75 && color <= 100) {
+        return  "#30DB63"
+      }
+    },
+
+    widthProgress(val) {
+      return val * 10
+    },
+
+    initValues() {
+      this.progressValue = 0;
+      this.progressbar = 0.5;
+    },
+
+    incrementValue(val) {
+      if (this.progressValue < 0 || this.progressValue >= 100) {
+        return;
+      } else {
+        this.progressValue += val;
+      }
+       
+    },
   }
 };
 </script>
 
-<style lang="scss">
+<style>
 /* Layout Properties */
 .home {
-  top: 83px;
-  left: 0px;
-  width: 1429px;
-  height: 612px;
-  /* UI Properties */
-  background: #242424 0% 0% no-repeat padding-box;
-  background: #242424 0% 0% no-repeat padding-box;
+  height: 100vh;
+  background: var(--dark-grey-color) 0% 0% no-repeat padding-box;
   opacity: 1;
 }
 
@@ -48,6 +88,14 @@ export default {
  display: flex;
  justify-content: center;
  padding-top: 81px;
+ margin-bottom: 100px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 h3 {
@@ -57,17 +105,15 @@ h3 {
     font-weight: bold;
     font-size: 16px;
     letter-spacing: 0px;
-    color: #FFFFFF;
+    color: var(--white-color);
     opacity: 1;
 }
+
 
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: left;
-  margin-top: 100px;
+  align-items: flex-start;
   width: 898px;
   height: 158px;
 }
@@ -76,7 +122,7 @@ h3 {
   font-family: "Roboto";
   font-size: 14px;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: var(--white-color);
   opacity: 1;
 }
 
@@ -86,12 +132,12 @@ h3 {
 
 button {
   text-decoration: none;
-  padding: 0.75rem 1.5rem;
-  font: inherit;
-  background-color: #373737;
-  border: 1px solid #373737;
+  padding: 10px 15px;
+  font-family: inherit;
+  background-color: var(--light-grey-color);
+  border: 1px solid var(--light-grey-color);
   box-shadow: 0px 3px 6px #00000029;
-  color: white;
+  color: var(--white-color);
   cursor: pointer;
   margin-right: 0.5rem;
   display: inline-block;

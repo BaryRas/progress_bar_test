@@ -1,19 +1,15 @@
 <template>
   <div class="progress-bar">
-    <div class="progress-bar__text">{{ progress }} %</div>
-    <div class="progress-bar__bar"></div>
+    <div class="progress-bar__text">{{ progressValue }} %</div>
+    <div class="progress-bar__bar" :style="{ 'width': widthProgress === 0 ? '5px' : `${widthProgress}px`, 'background-color': progressColor }"></div>
   </div>
 </template>
 
 <script>
 export default {
   name: "ProgressBar",
-  props: ["initialValue", "value"],
-  data() {
-    return {
-      progress: this.initialValue
-    };
-  }
+  props: ["progressValue", "widthProgress", "progressColor"],
+
 }
 </script>
 
@@ -21,12 +17,17 @@ export default {
 .progress-bar {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  padding: 18px 0;
+  margin-bottom: 50px;
+}
+
+.progress-bar__text {
+  color: var(--white-color);
 }
 .progress-bar__bar {
-    width: 420px;
     height: 10px;
-    background-color: #04AA6D;
-
-    color: white;
+    margin-left: 20px;
+    color: var(--white-color);
 }
 </style>
